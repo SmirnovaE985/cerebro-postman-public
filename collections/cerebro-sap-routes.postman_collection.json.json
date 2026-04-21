@@ -1,0 +1,1472 @@
+{
+  "info": {
+    "_postman_id": "77d71fab-68da-4c25-b731-824c78c243d4",
+    "name": "cerebro (саповские роуты)",
+    "description": "# Описание коллекции\n\nКоллекция предназначена для тестирования API **Cerebro**.\n\nКоллекция используется для проверки основных пользовательских и технических сценариев работы с API:\n\n- выполнения запросов к ручкам сервиса;\n    \n- проверки авторизации разными способами;\n    \n- проверки корректности ответов;\n    \n- проверки обработки ошибок;\n    \n- проверки базовой бизнес-логики методов.\n    \n\nКоллекция может использоваться для тестирования как внутренних, так и интеграционных сценариев в зависимости от выбранного окружения и доступных токенов.\n\n---\n\n# Что тестируется в коллекции\n\nКоллекция покрывает следующие аспекты:\n\n- выполнение запросов к API Cerebro;\n    \n- корректность HTTP-статусов;\n    \n- структура и валидность JSON-ответов;\n    \n- базовая бизнес-логика ответов;\n    \n- обработка ошибок API;\n    \n- работа авторизации через headers, basic auth и cookie в зависимости от конкретной ручки.\n    \n\n---\n\n# Переменные и безопасность\n\nВ коллекции используются переменные окружения:\n\n- `cerebroBaseUrl` — базовый URL API;\n    \n- `x-app-client` — идентификатор клиента;\n    \n- `x-token` — токен / идентификатор клиента;\n    \n- `authToken` — значение для `Authorization` header;\n    \n- `basicUser` — логин;\n    \n- `basicPassword` — пароль.\n    \n\n**Секретные данные в коллекции не хранятся.**  \nРеальные токены, пароли, cookie и другие чувствительные данные не включены в коллекцию и должны заполняться локально в environment.\n\nРабочие значения:\n\n- `authToken`\n    \n- `x-token`\n    \n- `basicPassword`\n    \n\nв коллекцию не добавляются.\n\n---\n\n# Как использовать коллекцию\n\n1. Выбрать environment для работы.\n    \n2. Заполнить локально необходимые переменные:\n    \n    - `cerebroBaseUrl`\n        \n    - `x-app-client`\n        \n    - `x-token`\n        \n    - `authToken`\n        \n    - `basicUser`\n        \n    - `basicPassword`\n        \n3. При необходимости использовать собственную cookie или тестовую сессию.\n    \n4. Выполнять запросы по нужным папкам коллекции.\n    \n\n---\n\n# Проверки и запуск коллекции\n\nДля запросов в коллекции добавлены базовые проверки во вкладке **Scripts / Tests**:\n\n- проверка HTTP-статуса;\n    \n- проверка формата ответа;\n    \n- проверка наличия ключевых полей;\n    \n- базовые проверки бизнес-логики.\n    \n\nПроверки можно запускать:\n\n- по одному, выполняя отдельный запрос;\n    \n- сразу для всей коллекции через **Run collection**.\n    \n\n## Как запустить все проверки сразу\n\n1. Открой коллекцию\n    \n2. Нажми **Run**\n    \n3. Выбери нужный **environment**\n    \n4. Отметь запросы, которые нужно выполнить\n    \n5. Нажми **Run**\n    \n6. После выполнения посмотри результаты по passed / failed тестам\n    \n\n# Особенности авторизации\n\nСпособ авторизации зависит от конкретного метода и окружения.\n\nДля разных ручек может потребоваться:\n\n- `Authorization` header;\n    \n- `x-token`;\n    \n- `x-app-client`;\n    \n- Basic Auth;\n    \n- Cookie / сессия;\n    \n- комбинация нескольких способов сразу.\n    \n\nЕсли запрос не выполняется, в первую очередь нужно проверить:\n\n- актуальность токена;\n    \n- корректность cookie;\n    \n- правильность environment;\n    \n- заполненность обязательных переменных.\n    \n\n---\n\n# Рекомендации по использованию\n\nПеред запуском запросов рекомендуется:\n\n- убедиться, что выбран правильный environment;\n    \n- проверить, что все обязательные переменные заполнены;\n    \n- использовать локальные значения токенов и паролей;\n    \n- не сохранять реальные секреты в коллекции.\n    \n\n---\n\n# Что важно проверять\n\nПри тестировании рекомендуется обращать внимание на:\n\n- корректный HTTP-статус ответа;\n    \n- формат ответа;\n    \n- наличие обязательных полей в JSON;\n    \n- соответствие ответа ожидаемой бизнес-логике;\n    \n- корректность обработки невалидных данных;\n    \n- корректность поведения при невалидной или отсутствующей авторизации.\n    \n\n---\n\n# Переменные\n\n- `cerebroBaseUrl` — базовый URL API\n    \n- `x-app-client` — идентификатор клиента\n    \n- `x-token` — токен / идентификатор клиента\n    \n- `authToken` — значение для Authorization header\n    \n- `basicUser` — логин\n    \n- `basicPassword` — пароль",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "46057530",
+    "_collection_link": "https://go.postman.co/collection/46057530-77d71fab-68da-4c25-b731-824c78c243d4?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "V1",
+      "item": [
+        {
+          "name": "заза",
+          "item": [
+            {
+              "name": "получить данные по зазе",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-app-client",
+                    "value": "{{x-app-client}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-token",
+                    "value": "{{x-token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "{{authToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{cerebroBaseUrl}}/v1/search/materials/:material/zaza?plant=1023&dateTo=2026-03-30&valuation=ГОДНЫЙ",
+                  "host": [
+                    "{{cerebroBaseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "search",
+                    "materials",
+                    ":material",
+                    "zaza"
+                  ],
+                  "query": [
+                    {
+                      "key": "plant",
+                      "value": "1023",
+                      "description": "магазин получения"
+                    },
+                    {
+                      "key": "dateTo",
+                      "value": "2026-03-30",
+                      "description": "дата оформления"
+                    },
+                    {
+                      "key": "valuation",
+                      "value": "ГОДНЫЙ"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "key": "material",
+                      "value": "2777",
+                      "description": "код товара"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Получить даты перемещения товара",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-app-client",
+                    "value": "{{x-app-client}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-token",
+                    "value": "{{x-token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{cerebroBaseUrl}}/v3/products/:productId/date-arrived?plantId=1023",
+                  "host": [
+                    "{{cerebroBaseUrl}}"
+                  ],
+                  "path": [
+                    "v3",
+                    "products",
+                    ":productId",
+                    "date-arrived"
+                  ],
+                  "query": [
+                    {
+                      "key": "plantId",
+                      "value": "1023"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "key": "productId",
+                      "value": "2777"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "материалы",
+          "item": [
+            {
+              "name": "получить карточку товара",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Статус 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "const json = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"apiVersion = 1\", function () {\r",
+                      "    pm.expect(json.apiVersion).to.eql(\"1\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"id товара = 2777\", function () {\r",
+                      "    pm.expect(json.data.id).to.eql(\"2777\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Название товара заполнено\", function () {\r",
+                      "    pm.expect(json.data.name).to.be.a(\"string\").and.not.empty;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Есть хотя бы 1 картинка\", function () {\r",
+                      "    pm.expect(json.data.imagesUrl).to.be.an(\"array\").that.is.not.empty;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Цена > 0\", function () {\r",
+                      "    pm.expect(json.data.plant.price.price).to.be.above(0);\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-app-client",
+                    "value": "{{x-app-client}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-token",
+                    "value": "{{x-token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "{{authToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{cerebroBaseUrl}}/v1/materials/2777?salesOrg=1000&salesOffice=stri&plant=stri&valuation=ГОДНЫЙ&unit=stri&debtor=string&contractCode=string&plantPreorder=stri",
+                  "host": [
+                    "{{cerebroBaseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "materials",
+                    "2777"
+                  ],
+                  "query": [
+                    {
+                      "key": "salesOrg",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "salesOffice",
+                      "value": "stri"
+                    },
+                    {
+                      "key": "plant",
+                      "value": "stri"
+                    },
+                    {
+                      "key": "valuation",
+                      "value": "ГОДНЫЙ"
+                    },
+                    {
+                      "key": "unit",
+                      "value": "stri"
+                    },
+                    {
+                      "key": "debtor",
+                      "value": "string"
+                    },
+                    {
+                      "key": "contractCode",
+                      "value": "string"
+                    },
+                    {
+                      "key": "plantPreorder",
+                      "value": "stri"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "получить данные о заводе для карточки товара",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Статус 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "const json = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"apiVersion = 1\", function () {\r",
+                      "    pm.expect(json.apiVersion).to.eql(\"1\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"plantStock >= 0\", function () {\r",
+                      "    pm.expect(json.data.plantStock).to.be.a(\"number\");\r",
+                      "    pm.expect(json.data.plantStock).to.be.at.least(0);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"defaultPlace заполнен\", function () {\r",
+                      "    pm.expect(json.data.defaultPlace.code).to.be.a(\"string\").and.not.empty;\r",
+                      "    pm.expect(json.data.defaultPlace.name).to.be.a(\"string\").and.not.empty;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"places — непустой массив\", function () {\r",
+                      "    pm.expect(json.data.places).to.be.an(\"array\").that.is.not.empty;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"price.price > 0\", function () {\r",
+                      "    pm.expect(json.data.price.price).to.be.a(\"number\");\r",
+                      "    pm.expect(json.data.price.price).to.be.above(0);\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-app-client",
+                    "value": "{{x-app-client}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-token",
+                    "value": "{{x-token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{cerebroBaseUrl}}/v1/materials/:material/plant?salesOrg=1000&salesOffice=stri&plant=1021&unit=MSH&valuation=ГОДНЫЙ&debtor=string&contractCode=st",
+                  "host": [
+                    "{{cerebroBaseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "materials",
+                    ":material",
+                    "plant"
+                  ],
+                  "query": [
+                    {
+                      "key": "salesOrg",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "salesOffice",
+                      "value": "stri"
+                    },
+                    {
+                      "key": "plant",
+                      "value": "1021"
+                    },
+                    {
+                      "key": "unit",
+                      "value": "MSH"
+                    },
+                    {
+                      "key": "valuation",
+                      "value": "ГОДНЫЙ"
+                    },
+                    {
+                      "key": "debtor",
+                      "value": "string"
+                    },
+                    {
+                      "key": "contractCode",
+                      "value": "st"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "key": "material",
+                      "value": "2777"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "получить цены на товар",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Статус 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "const json = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"apiVersion = 1\", function () {\r",
+                      "    pm.expect(json.apiVersion).to.eql(\"1\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Цена > 0\", function () {\r",
+                      "    pm.expect(json.data.price).to.be.a(\"number\");\r",
+                      "    pm.expect(json.data.price).to.be.above(0);\r",
+                      "});\r",
+                      "\r",
+                      "\r",
+                      "pm.test(\"discountScale — непустой массив\", function () {\r",
+                      "    pm.expect(json.data.discountScale).to.be.an(\"array\").that.is.not.empty;\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-app-client",
+                    "value": "{{x-app-client}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-token",
+                    "value": "{{x-token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "{{authToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{cerebroBaseUrl}}/v1/materials/:material/plant/price?salesOrg=1000&salesOffice=stri&plant=1021&unit=UP&valuation=ГОДНЫЙ&debtor=string&contractCode=string",
+                  "host": [
+                    "{{cerebroBaseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "materials",
+                    ":material",
+                    "plant",
+                    "price"
+                  ],
+                  "query": [
+                    {
+                      "key": "salesOrg",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "salesOffice",
+                      "value": "stri"
+                    },
+                    {
+                      "key": "plant",
+                      "value": "1021"
+                    },
+                    {
+                      "key": "unit",
+                      "value": "UP"
+                    },
+                    {
+                      "key": "valuation",
+                      "value": "ГОДНЫЙ"
+                    },
+                    {
+                      "key": "debtor",
+                      "value": "string"
+                    },
+                    {
+                      "key": "contractCode",
+                      "value": "string"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "key": "material",
+                      "value": "37934"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "crm",
+          "item": [
+            {
+              "name": "получить приветствие",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Статус код = 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Content-Type содержит application/json\", function () {\r",
+                      "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Ответ является валидным JSON\", function () {\r",
+                      "    pm.expect(() => pm.response.json()).to.not.throw();\r",
+                      "});\r",
+                      "\r",
+                      "const response = pm.response.json();\r",
+                      "const data = response.data;\r",
+                      "\r",
+                      "pm.test(\"Корневая структура ответа корректна\", function () {\r",
+                      "    pm.expect(response).to.be.an(\"object\");\r",
+                      "    pm.expect(response).to.have.property(\"apiVersion\");\r",
+                      "    pm.expect(response).to.have.property(\"data\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"apiVersion заполнен\", function () {\r",
+                      "    pm.expect(response.apiVersion).to.be.a(\"string\");\r",
+                      "    pm.expect(response.apiVersion.trim()).to.not.equal(\"\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"data — объект\", function () {\r",
+                      "    pm.expect(data).to.be.an(\"object\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Все ожидаемые поля присутствуют в data\", function () {\r",
+                      "    const expectedFields = [\"message\", \"client\", \"operator\", \"project\", \"region\", \"lastmim\", \"branson\"];\r",
+                      "    expectedFields.forEach(field => {\r",
+                      "        pm.expect(data, `Нет поля ${field}`).to.have.property(field);\r",
+                      "    });\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Все поля в data имеют тип string\", function () {\r",
+                      "    Object.keys(data).forEach(key => {\r",
+                      "        pm.expect(data[key], `Поле ${key} должно быть string`).to.be.a(\"string\");\r",
+                      "    });\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"message заполнен и содержит текст приветствия\", function () {\r",
+                      "    pm.expect(data.message.trim().length).to.be.greaterThan(0);\r",
+                      "    pm.expect(data.message.toLowerCase()).to.include(\"здравствуйте\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"operator заполнен\", function () {\r",
+                      "    pm.expect(data.operator.trim().length).to.be.greaterThan(0);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"operator в ответе в верхнем регистре\", function () {\r",
+                      "    pm.expect(data.operator).to.eql(data.operator.toUpperCase());\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"message содержит имя оператора\", function () {\r",
+                      "    pm.expect(data.message.toUpperCase()).to.include(data.operator.toUpperCase());\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-app-client",
+                    "value": "{{x-app-client}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-token",
+                    "value": "{{x-token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "{{authToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{cerebroBaseUrl}}/v1/crm/greeting?phone=+79000000033&operator=Елена&projectid=string&lastmim=string&branson=string",
+                  "host": [
+                    "{{cerebroBaseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "crm",
+                    "greeting"
+                  ],
+                  "query": [
+                    {
+                      "key": "phone",
+                      "value": "+79000000033"
+                    },
+                    {
+                      "key": "operator",
+                      "value": "Елена"
+                    },
+                    {
+                      "key": "projectid",
+                      "value": "string"
+                    },
+                    {
+                      "key": "lastmim",
+                      "value": "string"
+                    },
+                    {
+                      "key": "branson",
+                      "value": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "получить шаблоны смс",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Статус код = 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Ответ приходит в JSON\", function () {\r",
+                      "    pm.response.to.be.json;\r",
+                      "});\r",
+                      "\r",
+                      "const jsonData = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Есть apiVersion\", function () {\r",
+                      "    pm.expect(jsonData).to.have.property(\"apiVersion\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Есть объект data\", function () {\r",
+                      "    pm.expect(jsonData).to.have.property(\"data\");\r",
+                      "    pm.expect(jsonData.data).to.be.an(\"object\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Поле items является массивом\", function () {\r",
+                      "    pm.expect(jsonData.data).to.have.property(\"items\");\r",
+                      "    pm.expect(jsonData.data.items).to.be.an(\"array\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Поле totalItems является числом\", function () {\r",
+                      "    pm.expect(jsonData.data).to.have.property(\"totalItems\");\r",
+                      "    pm.expect(jsonData.data.totalItems).to.be.a(\"number\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Количество items совпадает с totalItems\", function () {\r",
+                      "    pm.expect(jsonData.data.items.length).to.eql(jsonData.data.totalItems);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"В каждом элементе есть обязательные поля\", function () {\r",
+                      "    jsonData.data.items.forEach((item) => {\r",
+                      "        pm.expect(item).to.have.property(\"code\");\r",
+                      "        pm.expect(item).to.have.property(\"name\");\r",
+                      "        pm.expect(item).to.have.property(\"text\");\r",
+                      "        pm.expect(item).to.have.property(\"guid\");\r",
+                      "\r",
+                      "        pm.expect(item.code).to.be.a(\"string\").and.not.empty;\r",
+                      "        pm.expect(item.name).to.be.a(\"string\").and.not.empty;\r",
+                      "        pm.expect(item.text).to.be.a(\"string\").and.not.empty;\r",
+                      "        pm.expect(item.guid).to.be.a(\"string\").and.not.empty;\r",
+                      "    });\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-app-client",
+                    "value": "{{x-app-client}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-token",
+                    "value": "{{x-token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "{{authToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{cerebroBaseUrl}}/v1/crm/sms/templates?phone=+79003337777&user=Иван&order=2114293439",
+                  "host": [
+                    "{{cerebroBaseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "crm",
+                    "sms",
+                    "templates"
+                  ],
+                  "query": [
+                    {
+                      "key": "phone",
+                      "value": "+79003337777"
+                    },
+                    {
+                      "key": "user",
+                      "value": "Иван"
+                    },
+                    {
+                      "key": "order",
+                      "value": "2114293439"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "отправить смс",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Статус код = 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Ответ приходит в JSON\", function () {\r",
+                      "    pm.response.to.be.json;\r",
+                      "});\r",
+                      "\r",
+                      "const jsonData = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Есть apiVersion\", function () {\r",
+                      "    pm.expect(jsonData).to.have.property(\"apiVersion\");\r",
+                      "    pm.expect(jsonData.apiVersion).to.be.a(\"string\").and.not.empty;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Есть объект data\", function () {\r",
+                      "    pm.expect(jsonData).to.have.property(\"data\");\r",
+                      "    pm.expect(jsonData.data).to.be.an(\"object\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Есть поле message\", function () {\r",
+                      "    pm.expect(jsonData.data).to.have.property(\"message\");\r",
+                      "    pm.expect(jsonData.data.message).to.be.a(\"string\").and.not.empty;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Сообщение об успешной отправке корректное\", function () {\r",
+                      "    pm.expect(jsonData.data.message).to.eql(\"Сообщение отправленно\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-app-client",
+                    "value": "{{x-app-client}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-token",
+                    "value": "{{x-token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "{{authToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"phone\": \"79000000053\",\r\n  \"text\": \"hello, it`s meee\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{cerebroBaseUrl}}/v1/crm/sms",
+                  "host": [
+                    "{{cerebroBaseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "crm",
+                    "sms"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "sevices",
+          "item": [
+            {
+              "name": "создать претензию",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Статус 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "const json = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"apiVersion = 1\", function () {\r",
+                      "    pm.expect(json.apiVersion).to.eql(\"1\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"code = 200\", function () {\r",
+                      "    pm.expect(json.data.code).to.eql(\"200\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"claimNumber заполнен\", function () {\r",
+                      "    pm.expect(json.data.claimNumber).to.be.a(\"string\").and.not.empty;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"message об успешном создании\", function () {\r",
+                      "    pm.expect(json.data.message).to.include(\"успешно\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-app-client",
+                    "value": "{{x-app-client}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-token",
+                    "value": "{{x-token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "{{authToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"orderNumber\": \"2114293734\",\r\n  \"saleOrg\": \"1000\",\r\n  \"phone\": \"79000000033\",\r\n  \"incidentType\": \"DLV\",\r\n  \"claimSource\": \"APP\",\r\n  \"date\": \"2026-02-17\",\r\n  \"time\": \"stri\",\r\n  \"reason\": \"str\",\r\n  \"status\": \"E0001\",\r\n  \"detailsTxt\": \"hhhhhhhhhhhhhh\",\r\n  \"commentTxt\": \"\",\r\n  \"clientCode\": \"0000000001\",\r\n  \"salesDep\": \"1099\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{cerebroBaseUrl}}/v1/services/claim",
+                  "host": [
+                    "{{cerebroBaseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "services",
+                    "claim"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "получить инф по оплатам и возвратам",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Статус 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "const json = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"apiVersion = 1\", function () {\r",
+                      "    pm.expect(json.apiVersion).to.eql(\"1\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"erpOrderNumber заполнен\", function () {\r",
+                      "    pm.expect(json.data.erpOrderNumber).to.be.a(\"string\").and.not.empty;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"type = PAYMENT\", function () {\r",
+                      "    pm.expect(json.data.type).to.eql(\"PAYMENT\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"orderAmount >= 0\", function () {\r",
+                      "    pm.expect(json.data.orderAmount).to.be.a(\"number\");\r",
+                      "    pm.expect(json.data.orderAmount).to.be.at.least(0);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"successRelatedTransactions — массив\", function () {\r",
+                      "    pm.expect(json.data.successRelatedTransactions).to.be.an(\"array\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-app-client",
+                    "value": "{{x-app-client}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-token",
+                    "value": "{{x-token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{cerebroBaseUrl}}/v1/services/order-with-related-transactions/:orderNumber",
+                  "host": [
+                    "{{cerebroBaseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "services",
+                    "order-with-related-transactions",
+                    ":orderNumber"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderNumber",
+                      "value": "2114293534"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "order",
+          "item": [
+            {
+              "name": "создать заказ",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Статус 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "const json = pm.response.json();\r",
+                      "const req = pm.request.body ? JSON.parse(pm.request.body.raw) : {};\r",
+                      "\r",
+                      "pm.test(\"apiVersion = 1\", function () {\r",
+                      "    pm.expect(json.apiVersion).to.eql(\"1\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Номер заказа заполнен\", function () {\r",
+                      "    pm.expect(json.data.number).to.be.a(\"string\").and.not.empty;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"GUID совпадает\", function () {\r",
+                      "    pm.expect(json.data.guid).to.eql(req.guid);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Телефон клиента совпадает\", function () {\r",
+                      "    pm.expect(json.data.client.phone).to.eql(req.phone);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Код организации продаж совпадает\", function () {\r",
+                      "    pm.expect(json.data.salesOrg.code).to.eql(req.salesOrgCode);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Есть 1+ позиция\", function () {\r",
+                      "    pm.expect(json.data.positions).to.be.an(\"array\").that.is.not.empty;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"materialId первой позиции совпадает\", function () {\r",
+                      "    pm.expect(json.data.positions[0].material.id).to.eql(req.positions[0].materialId);\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-app-client",
+                    "value": "{{x-app-client}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-token",
+                    "value": "{{x-token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"parentNumber\": \"\",\r\n  \"typeCode\": \"\",\r\n  \"source\": \"\",\r\n  \"guid\": \"56f4a6d0-29cb-11f1-85fa-e31a172a450e\",  //\"cartGuid\"\r\n  \"authorCode\": \"elesmirnova\",\r\n  \"contractCode\": \"\",\r\n  \"proxyCode\": \"\",\r\n  \"salesOrgCode\": \"1000\",\r\n  \"salesDepCode\": \"1099\",\r\n  \"salesChnCode\": \"\",\r\n  \"salesGrpCode\": \"\",\r\n  \"payment\": {\r\n    \"card\": 0,\r\n    \"cash\": 0,\r\n    \"qr\": 0\r\n  },\r\n  \"clientCode\": \"\",\r\n  \"clientName\": \"\",\r\n  \"clientUuid\": \"a4260288-0e53-415a-90b4-86e14459bc4c\",\r\n  \"phone\": \"79000000022\",\r\n  \"preorderContact\": {\r\n    \"phone\": \"\",\r\n    \"name\": \"\"\r\n  },\r\n  \"reliability\": \"\",\r\n  \"comment\": \"\",\r\n  \"commentOnInvoice\": \"\",\r\n  \"shippingSalesOrgCode\": \"\",\r\n  \"sourceOrder\": \"\",\r\n  \"guaranteeId\": \"\",\r\n  \"promo\": [],\r\n  \"positions\": [\r\n    {\r\n      \"guid\": \"551d00a0-29cb-11f1-85fa-e31a172a450e\",  //\"positionGuid\"\r\n      \"type\": \"PRODUCT\",\r\n      \"assignment\": \"\",\r\n      \"isZaza\": false,\r\n      \"dateShipped\": \"\",\r\n      \"timeShipped\": \"\",\r\n      \"zazaTime\": \"\",\r\n      \"number\": \"\",\r\n      \"materialId\": \"570060\",\r\n      \"valuation\": \"ГОДНЫЙ\",\r\n      \"price\": 4494,\r\n      \"promoPrice\": 0,\r\n      \"promoCompensation\": 0,\r\n      \"handPrice\": false,\r\n      \"quantity\": 1,\r\n      \"unitCode\": \"ST\",\r\n      \"exportPlantCode\": \"\",\r\n      \"inflowCode\": \"\",\r\n      \"plantCode\": \"1021\",\r\n      \"placeCode\": \"\",\r\n      \"storeCode\": \"\",\r\n      \"isCanceled\": false,\r\n      \"comment\": \"\",\r\n      \"services\": {\r\n        \"preciseCut\": {\r\n          \"sheetSaws\": [],\r\n          \"sheetItems\": []\r\n        },\r\n        \"simpleCut\": {\r\n          \"length\": [],\r\n          \"width\": []\r\n        },\r\n        \"tinting\": {\r\n          \"name\": \"\",\r\n          \"price\": 0\r\n        },\r\n        \"sawing\": {\r\n          \"guid\": \"\",\r\n          \"serviceId\": \"\",\r\n          \"sawCount\": 0\r\n        }\r\n      },\r\n      \"gtr\": {\r\n        \"id\": \"\",\r\n        \"date\": \"\",\r\n        \"delivery\": {\r\n          \"idService\": \"\",\r\n          \"address\": \"\"\r\n        }\r\n      }\r\n    }\r\n  ]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{cerebroBaseUrl}}/v1/orders",
+                  "host": [
+                    "{{cerebroBaseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "orders"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Изменить сбытовой заказ",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Статус 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "const res = pm.response.json();\r",
+                      "const req = JSON.parse(pm.request.body.raw);\r",
+                      "const pos = req.positions[0].standartOption;\r",
+                      "\r",
+                      "pm.test(\"apiVersion = 1\", function () {\r",
+                      "    pm.expect(res.apiVersion).to.eql(\"1\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Есть id заказа\", function () {\r",
+                      "    pm.expect(res.data.id).to.be.a(\"string\").and.not.empty;\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "x-app-client",
+                    "value": "{{x-app-client}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-token",
+                    "value": "{{x-token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "{{authToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"guid\": \"56f4a6d0-29cb-11f1-85fa-e31a172a450e\",\r\n  \"header\": {\r\n    \"changedAt\": 0,\r\n    \"saleData\": {\r\n      \"shippingOrganizationId\": \"1000\"\r\n    },\r\n    \"customer\": {\r\n      \"uuid\": \"a4260288-0e53-415a-90b4-86e14459bc4c\",\r\n      \"phone\": \"79000000022\"\r\n    },\r\n    \"preorderContact\": {\r\n      \"phone\": \"\",\r\n      \"name\": \"Розничный покупатель\"\r\n    },\r\n    \"commentary\": \"\",\r\n    \"payments\": {\r\n      \"card\": 0,\r\n      \"cash\": 0,\r\n      \"qr\": 0\r\n    }\r\n  },\r\n  \"promo\": [],\r\n  \"positions\": [\r\n    {\r\n      \"type\": \"STANDART\",\r\n      \"concreteOption\": null,\r\n      \"standartOption\": {\r\n        \"guid\": \"551d00a0-29cb-11f1-85fa-e31a172a450e\",\r\n        \"number\": \"000010\",\r\n        \"productId\": \"570060\",\r\n        \"valuationKind\": \"ГОДНЫЙ\",\r\n        \"plantId\": \"1021\",\r\n        \"exportPlantId\": \"\",\r\n        \"isCanceled\": false,\r\n        \"quantity\": {\r\n          \"value\": 1,\r\n          \"unitId\": \"ST\"\r\n        },\r\n        \"prices\": {\r\n          \"hand\": 6000,\r\n          \"promo\": 0\r\n        },\r\n        \"commentary\": \"\",\r\n        \"shippedDate\": null,\r\n        \"shippedTime\": \"00:00:00\"\r\n      },\r\n      \"preorderOption\": null,\r\n      \"inflowOption\": null\r\n    }\r\n  ],\r\n  \"shipments\": []\r\n}\r\n\r\n\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{cerebroBaseUrl}}/v3/cart/:orderId",
+                  "host": [
+                    "{{cerebroBaseUrl}}"
+                  ],
+                  "path": [
+                    "v3",
+                    "cart",
+                    ":orderId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "2114293876"
+                    }
+                  ]
+                },
+                "description": "запрос на извемение данных в уже созданном заказе, например цена или количество\n\nиз успешно созданного заказа взять данные :  \nguid → 56f4a6d0-29cb-11f1-85fa-e31a172a450e  \nnumber → 2114293876 — это orderId\n\n**позиция:  \nguid → 551d00a0-29cb-11f1-85fa-e31a172a450e  \nmaterial.id → 570060  \nvaluation → ГОДНЫЙ  \nplant.code → 1021  \nunit.code → ST  \nquantity → 1  \nprice → 4490  \nnumber → 000010  \nклиент:  \nuuid → a4260288-0e53-415a-90b4-86e14459bc4c  \nphone → 79000000022  \nshippingSalesOrg.code → 1000**\n\n// {  \n// \"guid\": \"56f4a6d0-29cb-11f1-85fa-e31a172a450e\",  \n// \"header\": {  \n// \"changedAt\": 8792.437994877077,  \n// \"saleData\": {  \n// \"shippingOrganizationId\": null  \n// },  \n// \"customer\": null,  \n// \"preorderContact\": null,  \n// \"commentary\": \"string\",  \n// \"payments\": {  \n// \"card\": 2066.4088130163473,  \n// \"cash\": 9743.604511218071,  \n// \"qr\": 3442.476839111717  \n// }  \n// },  \n// \"promo\": \\[  \n// {  \n// \"name\": \"string\",  \n// \"type\": \"string\",  \n// \"amount\": null  \n// },  \n// {  \n// \"name\": \"string\",  \n// \"type\": \"string\",  \n// \"amount\": 1145.3438116698633  \n// }  \n// \\],  \n// \"positions\": \\[  \n// {  \n// \"type\": \"STANDART\",  \n// \"concreteOption\": {  \n// \"guid\": \"551d00a0-29cb-11f1-85fa-e31a172a450e\",  \n// \"number\": \"string\",  \n// \"productId\": \"string\",  \n// \"assignment\": \"SHIPMENT\",  \n// \"isCanceled\": true,  \n// \"quantity\": {  \n// \"value\": 9358.555465580315,  \n// \"unitId\": \"str\"  \n// },  \n// \"prices\": {  \n// \"hand\": 2500.7861198271403,  \n// \"promo\": null  \n// },  \n// \"commentary\": \"string\"  \n// },  \n// \"standartOption\": null,  \n// \"preorderOption\": {  \n// \"guid\": \"string\",  \n// \"number\": null,  \n// \"productId\": \"string\",  \n// \"valuationKind\": \"string\",  \n// \"plantId\": \"stri\",  \n// \"exportPlantId\": \"stri\",  \n// \"isCanceled\": true,  \n// \"quantity\": {  \n// \"value\": 2265.4602575193694,  \n// \"unitId\": \"str\"  \n// },  \n// \"prices\": {  \n// \"hand\": 2877.3389263049553,  \n// \"promo\": null  \n// },  \n// \"commentary\": \"string\",  \n// \"shippedDate\": \"1995-05-17\",  \n// \"shippedTime\": \"string\"  \n// },  \n// \"inflowOption\": {  \n// \"guid\": \"string\",  \n// \"number\": \"string\",  \n// \"productId\": \"string\",  \n// \"valuationKind\": \"string\",  \n// \"plantId\": \"stri\",  \n// \"exportPlantId\": \"stri\",  \n// \"isCanceled\": true,  \n// \"quantity\": {  \n// \"value\": 4745.665113794628,  \n// \"unitId\": \"str\"  \n// },  \n// \"prices\": {  \n// \"hand\": null,  \n// \"promo\": null  \n// },  \n// \"commentary\": \"string\",  \n// \"dateShipped\": \"1986-12-30\",  \n// \"inflowId\": \"string\"  \n// }  \n// },  \n// {  \n// \"type\": \"PREORDER\",  \n// \"concreteOption\": {  \n// \"guid\": \"string\",  \n// \"number\": \"string\",  \n// \"productId\": \"string\",  \n// \"assignment\": \"SHIPMENT\",  \n// \"isCanceled\": false,  \n// \"quantity\": {  \n// \"value\": 2228.2061904250795,  \n// \"unitId\": \"str\"  \n// },  \n// \"prices\": {  \n// \"hand\": null,  \n// \"promo\": null  \n// },  \n// \"commentary\": null  \n// },  \n// \"standartOption\": null,  \n// \"preorderOption\": null,  \n// \"inflowOption\": {  \n// \"guid\": \"string\",  \n// \"number\": null,  \n// \"productId\": \"string\",  \n// \"valuationKind\": \"string\",  \n// \"plantId\": \"stri\",  \n// \"exportPlantId\": \"stri\",  \n// \"isCanceled\": true,  \n// \"quantity\": {  \n// \"value\": 5234.14042670731,  \n// \"unitId\": \"str\"  \n// },  \n// \"prices\": {  \n// \"hand\": 5900.227717787358,  \n// \"promo\": 6304.654107238741  \n// },  \n// \"commentary\": null,  \n// \"dateShipped\": \"2025-12-10\",  \n// \"inflowId\": \"string\"  \n// }  \n// }  \n// \\],  \n// \"shipments\": \\[  \n// {  \n// \"type\": \"CONCRETE\",  \n// \"concreteOption\": null,  \n// \"standartOption\": {  \n// \"id\": null,  \n// \"isCanceled\": false,  \n// \"commentary\": \"string\",  \n// \"date\": \"2002-12-06\",  \n// \"phones\": {  \n// \"current\": \"string\",  \n// \"extens\": \"string\"  \n// },  \n// \"address\": {  \n// \"full\": \"string\",  \n// \"coordinates\": {  \n// \"latitude\": 3900.21165041502,  \n// \"longitude\": 6378.969488341477  \n// },  \n// \"country\": {  \n// \"id\": \"string\",  \n// \"title\": \"string\"  \n// },  \n// \"region\": {  \n// \"id\": \"string\",  \n// \"title\": \"string\"  \n// },  \n// \"subregion\": \"string\",  \n// \"city\": \"string\",  \n// \"district\": \"string\",  \n// \"street\": \"string\",  \n// \"house\": \"string\",  \n// \"postCode\": \"string\"  \n// },  \n// \"interval\": \"string\",  \n// \"transportTypeId\": \"st\",  \n// \"volume\": {  \n// \"value\": 534.1754550164123,  \n// \"unitId\": \"str\"  \n// },  \n// \"price\": null,  \n// \"unloading\": {  \n// \"leaveAtDoor\": true,  \n// \"onlyUnloading\": false,  \n// \"floor\": \"string\",  \n// \"meter\": 509,  \n// \"elevator\": true,  \n// \"sum\": 6172.271339700004  \n// }  \n// }  \n// },  \n// {  \n// \"type\": \"STANDART\",  \n// \"concreteOption\": {  \n// \"id\": \"string\",  \n// \"isCanceled\": true,  \n// \"commentary\": \"string\",  \n// \"date\": \"2002-11-04\",  \n// \"phones\": {  \n// \"current\": \"string\",  \n// \"extens\": \"string\"  \n// },  \n// \"address\": {  \n// \"full\": \"string\",  \n// \"coordinates\": {  \n// \"latitude\": 5021.672411375304,  \n// \"longitude\": 7435.166021409689  \n// },  \n// \"country\": {  \n// \"id\": \"string\",  \n// \"title\": \"string\"  \n// },  \n// \"region\": {  \n// \"id\": \"string\",  \n// \"title\": \"string\"  \n// },  \n// \"subregion\": \"string\",  \n// \"city\": \"string\",  \n// \"district\": \"string\",  \n// \"street\": \"string\",  \n// \"house\": \"string\",  \n// \"postCode\": \"string\"  \n// },  \n// \"interval\": \"string\",  \n// \"transportTypeId\": \"st\",  \n// \"volume\": {  \n// \"value\": 7867.604976957994,  \n// \"unitId\": \"str\"  \n// },  \n// \"price\": 4533.618447317551  \n// },  \n// \"standartOption\": {  \n// \"id\": null,  \n// \"isCanceled\": false,  \n// \"commentary\": null,  \n// \"date\": \"1991-11-28\",  \n// \"phones\": {  \n// \"current\": \"string\",  \n// \"extens\": \"string\"  \n// },  \n// \"address\": {  \n// \"full\": \"string\",  \n// \"coordinates\": {  \n// \"latitude\": 380.2492596262619,  \n// \"longitude\": 8743.009861128177  \n// },  \n// \"country\": {  \n// \"id\": \"string\",  \n// \"title\": \"string\"  \n// },  \n// \"region\": {  \n// \"id\": \"string\",  \n// \"title\": \"string\"  \n// },  \n// \"subregion\": \"string\",  \n// \"city\": \"string\",  \n// \"district\": \"string\",  \n// \"street\": \"string\",  \n// \"house\": \"string\",  \n// \"postCode\": \"string\"  \n// },  \n// \"interval\": \"string\",  \n// \"transportTypeId\": \"st\",  \n// \"volume\": {  \n// \"value\": 9815.83580411943,  \n// \"unitId\": \"str\"  \n// },  \n// \"price\": null,  \n// \"unloading\": {  \n// \"leaveAtDoor\": true,  \n// \"onlyUnloading\": false,  \n// \"floor\": \"string\",  \n// \"meter\": 3528,  \n// \"elevator\": true,  \n// \"sum\": 8923.010337628899  \n// }  \n// }  \n// }  \n// \\]  \n// }"
+              },
+              "response": []
+            },
+            {
+              "name": "получить данные о заказе",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const json = pm.response.json();\r",
+                      "const expectedPrice = Number(pm.environment.get(\"expectedPrice\"));\r",
+                      "const expectedQty = Number(pm.environment.get(\"expectedQty\"));\r",
+                      "\r",
+                      "pm.test(\"Статус 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Есть заказ\", function () {\r",
+                      "    pm.expect(json.data.number).to.be.a(\"string\").and.not.empty;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Есть позиции\", function () {\r",
+                      "    pm.expect(json.data.positions).to.be.an(\"array\").that.is.not.empty;\r",
+                      "});\r",
+                      "\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-app-client",
+                    "value": "{{x-app-client}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-token",
+                    "value": "{{x-token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{cerebroBaseUrl}}/v1/orders/2114293876",
+                  "host": [
+                    "{{cerebroBaseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "orders",
+                    "2114293876"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "V2",
+      "item": [
+        {
+          "name": "GTR",
+          "item": [
+            {
+              "name": "Проверить возможность поставки выбранным транспортом",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-app-client",
+                    "value": "{{x-app-client}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-token",
+                    "value": "{{x-token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"address\": {\r\n    \"pointCoordinates\": {\r\n      \"latitude\": 7636.752361958912,\r\n      \"longitude\": 9134.126588268799\r\n    },\r\n    \"pointAddress\": {\r\n      \"fullAddress\": \"string\",\r\n      \"country\": \"string\",\r\n      \"countryCode\": \"string\",\r\n      \"region\": \"string\",\r\n      \"regionCode\": \"string\",\r\n      \"city\": \"string\",\r\n      \"street\": \"string\",\r\n      \"house\": \"string\",\r\n      \"postCode\": \"string\"\r\n    }\r\n  },\r\n  \"products\": [\r\n    {\r\n      \"plantCode\": \"stri\",\r\n      \"gtr\": \"string\",\r\n      \"price\": 1315.545996012213,\r\n      \"unit\": \"str\",\r\n      \"quantity\": 4799.775420776707,\r\n      \"material\": \"string\",\r\n      \"guid\": \"string\",\r\n      \"multiplicity\": \"string\"\r\n    },\r\n    {\r\n      \"plantCode\": \"stri\",\r\n      \"gtr\": \"string\",\r\n      \"price\": 9537.973878649118,\r\n      \"unit\": \"str\",\r\n      \"quantity\": 330.16231639716676,\r\n      \"material\": \"string\",\r\n      \"guid\": \"string\",\r\n      \"multiplicity\": \"string\"\r\n    }\r\n  ],\r\n  \"transports\": [\r\n    {\r\n      \"inco\": \"str\",\r\n      \"type\": \"st\",\r\n      \"date\": \"2000-09-29\",\r\n      \"serviceId\": \"string\",\r\n      \"cost\": 3840.7396513378276\r\n    },\r\n    {\r\n      \"inco\": \"str\",\r\n      \"type\": \"st\",\r\n      \"date\": \"1969-12-01\",\r\n      \"serviceId\": \"string\",\r\n      \"cost\": 2026.4410460486592\r\n    }\r\n  ]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{cerebroBaseUrl}}/v2/gtr/check_delivery",
+                  "host": [
+                    "{{cerebroBaseUrl}}"
+                  ],
+                  "path": [
+                    "v2",
+                    "gtr",
+                    "check_delivery"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "сбыт (organization)",
+          "item": [
+            {
+              "name": "Получить информацию по заводам в сбытовой",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Статус 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "const json = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"apiVersion = 1\", function () {\r",
+                      "    pm.expect(json.apiVersion).to.eql(\"1\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Есть список заводов\", function () {\r",
+                      "    pm.expect(json.data.items).to.be.an(\"array\").that.is.not.empty;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"У первого завода есть код и название\", function () {\r",
+                      "    pm.expect(json.data.items[0].plant).to.be.a(\"string\").and.not.empty;\r",
+                      "    pm.expect(json.data.items[0].plantName).to.be.a(\"string\").and.not.empty;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Есть координаты\", function () {\r",
+                      "    pm.expect(json.data.items[0].geo.latitude).to.be.a(\"number\");\r",
+                      "    pm.expect(json.data.items[0].geo.longitude).to.be.a(\"number\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Организация продаж совпадает\", function () {\r",
+                      "    pm.expect(json.data.items[0].defaultSaleOrg).to.eql(\"3000\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-app-client",
+                    "value": "{{x-app-client}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-token",
+                    "value": "{{x-token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{cerebroBaseUrl}}/v2/organization/plants?saleOrg=3000",
+                  "host": [
+                    "{{cerebroBaseUrl}}"
+                  ],
+                  "path": [
+                    "v2",
+                    "organization",
+                    "plants"
+                  ],
+                  "query": [
+                    {
+                      "key": "saleOrg",
+                      "value": "3000"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "V3",
+      "item": [
+        {
+          "name": "units",
+          "item": [
+            {
+              "name": "Получить список возможных ЕИ товара на заводе",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Статус 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "const json = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"apiVersion = 1\", function () {\r",
+                      "    pm.expect(json.apiVersion).to.eql(\"1\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Есть список единиц измерения\", function () {\r",
+                      "    pm.expect(json.data.items).to.be.an(\"array\").that.is.not.empty;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"total корректный\", function () {\r",
+                      "    pm.expect(json.data.total).to.eql(json.data.items.length);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Есть одна default единица\", function () {\r",
+                      "    const defaults = json.data.items.filter(item => item.default === true);\r",
+                      "    pm.expect(defaults.length).to.eql(1);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"У каждой единицы есть id и conversionCoef\", function () {\r",
+                      "    json.data.items.forEach(item => {\r",
+                      "        pm.expect(item.id).to.be.a(\"string\").and.not.empty;\r",
+                      "        pm.expect(item.conversionCoef).to.be.an(\"object\");\r",
+                      "    });\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-app-client",
+                    "value": "{{x-app-client}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-token",
+                    "value": "{{x-token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "{{authToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{cerebroBaseUrl}}/v3/products/:productId/units?plantId=1121",
+                  "host": [
+                    "{{cerebroBaseUrl}}"
+                  ],
+                  "path": [
+                    "v3",
+                    "products",
+                    ":productId",
+                    "units"
+                  ],
+                  "query": [
+                    {
+                      "key": "plantId",
+                      "value": "1121"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "key": "productId",
+                      "value": "33"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

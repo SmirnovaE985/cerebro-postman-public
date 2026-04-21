@@ -1,0 +1,669 @@
+{
+  "info": {
+    "_postman_id": "4a2156e5-81c1-47cb-becf-fcb6baf65fae",
+    "name": "сервис доставки (свд)",
+    "description": "StartFragment\n\n# Описание коллекции\n\nКоллекция предназначена для тестирования API сервиса вариантов доставки (СВД). В коллекции находяться только те методы, которые использует Cerebroю\n\nКоллекция используется для проверки основных пользовательских и технических сценариев работы с API СВД:\n\n- расчет разгрузки;\n    \n- получение доступных видов транспорта для корзины заказа;\n    \n- проверки доступности интервалов доставки;\n    \n- проверки базовой бизнес-логики методов.\n    \n\nКоллекция может использоваться для тестирования как внутренних, так и интеграционных сценариев в зависимости от выбранного окружения и доступных токенов.\n\n---\n\n# Что тестируется в коллекции\n\nКоллекция покрывает следующие аспекты:\n\n- выполнение запросов к API Cerebro и DEFINITION_DELIVERY_APIEnd;\n    \n- корректность HTTP-статусов;\n    \n- структура и валидность JSON-ответов;\n    \n- базовая бизнес-логика ответов;\n    \n- обработка ошибок API;\n    \n- работа авторизации через headers, basic auth и cookie в зависимости от конкретной ручки.\n    \n\n---\n\n# Переменные и безопасность\n\nВ коллекции используются переменные окружения:\n\n- `cerebroBaseUrl` — базовый URL API;\n    \n- `x-app-client` — идентификатор клиента;\n    \n- `x-token` — токен / идентификатор клиента;\n    \n- `authToken` — значение для `Authorization` header;\n    \n- `basicUser` — логин;\n    \n- `basicPassword` — пароль.\n    \n\n**Секретные данные в коллекции не хранятся.**  \nРеальные токены, пароли, cookie и другие чувствительные данные не включены в коллекцию и должны заполняться локально в environment.\n\n---\n\n# Как использовать коллекцию\n\n1. Выбрать environment для работы.\n    \n2. Заполнить локально необходимые переменные:\n    \n    - `cerebroBaseUrl`\n        \n    - `x-app-client`\n        \n    - `x-token`\n        \n    - `authToken`\n        \n    - `basicUser`\n        \n    - `basicPassword`\n        \n3. При необходимости использовать собственную cookie или тестовую сессию.\n    \n4. Выполнять запросы по нужным папкам коллекции.\n    \n\n---\n\n# Проверки и запуск коллекции\n\nДля запросов в коллекции добавлены базовые проверки во вкладке **Scripts / Tests**:\n\n- проверка HTTP-статуса;\n    \n- проверка формата ответа;\n    \n- проверка наличия ключевых полей;\n    \n- базовые проверки бизнес-логики.\n    \n\nПроверки можно запускать:\n\n- по одному, выполняя отдельный запрос;\n    \n- сразу для всей коллекции через **Run collection**.\n    \n\n## Как запустить все проверки сразу\n\n1. Открой коллекцию\n    \n2. Нажми **Run**\n    \n3. Выбери нужный **environment**\n    \n4. Отметь запросы, которые нужно выполнить\n    \n5. Нажми **Run**\n    \n6. После выполнения посмотри результаты по passed / failed тестам\n    \n\n# Особенности авторизации\n\nСпособ авторизации зависит от конкретного метода и окружения.\n\nДля разных ручек может потребоваться:\n\n- `Authorization` header;\n    \n- `x-token`;\n    \n- `x-app-client`;\n    \n- Basic Auth;\n    \n- Cookie / сессия;\n    \n- комбинация нескольких способов сразу.\n    \n\nЕсли запрос не выполняется, в первую очередь нужно проверить:\n\n- актуальность токена;\n    \n- корректность cookie;\n    \n- правильность environment;\n    \n- заполненность обязательных переменных.\n    \n\n---\n\n# Рекомендации по использованию\n\nПеред запуском запросов рекомендуется:\n\n- убедиться, что выбран правильный environment;\n    \n- проверить, что все обязательные переменные заполнены;\n    \n- использовать локальные значения токенов и паролей;\n    \n- не сохранять реальные секреты в коллекции.\n    \n\n---\n\n# Что важно проверять\n\nПри тестировании рекомендуется обращать внимание на:\n\n- корректный HTTP-статус ответа;\n    \n- формат ответа;\n    \n- наличие обязательных полей в JSON;\n    \n- соответствие ответа ожидаемой бизнес-логике;\n    \n- корректность обработки невалидных данных;\n    \n- корректность поведения при невалидной или отсутствующей авторизации.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "46057530",
+    "_collection_link": "https://go.postman.co/collection/46057530-4a2156e5-81c1-47cb-becf-fcb6baf65fae?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "саповские роуты",
+      "item": [
+        {
+          "name": "саповские роуты transports",
+          "item": [
+            {
+              "name": "получить инф о транспортировке",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "// Проверяем, что сервер вернул успешный HTTP-статус 200\r",
+                      "pm.test(\"Status code is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "// Проверяем, что ответ пришел в формате JSON\r",
+                      "pm.test(\"Response is valid JSON\", function () {\r",
+                      "    pm.response.to.be.json;\r",
+                      "});\r",
+                      "\r",
+                      "// Преобразуем тело ответа в JSON-объект\r",
+                      "const json = pm.response.json();\r",
+                      "\r",
+                      "// Проверяем, что в ответе есть объект data\r",
+                      "pm.test(\"Response contains data\", function () {\r",
+                      "    pm.expect(json).to.have.property(\"data\");\r",
+                      "    pm.expect(json.data).to.be.an(\"object\");\r",
+                      "});\r",
+                      "\r",
+                      "// Проверяем наличие основных полей доставки\r",
+                      "pm.test(\"Response contains main delivery fields\", function () {\r",
+                      "    pm.expect(json.data).to.have.property(\"number\");\r",
+                      "    pm.expect(json.data).to.have.property(\"orderId\");\r",
+                      "    pm.expect(json.data).to.have.property(\"date\");\r",
+                      "    pm.expect(json.data).to.have.property(\"interval\");\r",
+                      "});\r",
+                      "\r",
+                      "// Проверяем, что в ответе есть массив positions\r",
+                      "pm.test(\"Response contains positions array\", function () {\r",
+                      "    pm.expect(json.data).to.have.property(\"positions\");\r",
+                      "    pm.expect(json.data.positions).to.be.an(\"array\");\r",
+                      "});\r",
+                      "\r",
+                      "// Проверяем, что массив positions не пустой\r",
+                      "pm.test(\"Positions array is not empty\", function () {\r",
+                      "    pm.expect(json.data.positions.length).to.be.above(0);\r",
+                      "});\r",
+                      "\r",
+                      "// Проверяем, что у первой позиции есть основные поля\r",
+                      "pm.test(\"First position contains main fields\", function () {\r",
+                      "    const firstPosition = json.data.positions[0];\r",
+                      "\r",
+                      "    pm.expect(firstPosition).to.have.property(\"orderId\");\r",
+                      "    pm.expect(firstPosition).to.have.property(\"orderNumber\");\r",
+                      "    pm.expect(firstPosition).to.have.property(\"quantity\");\r",
+                      "    pm.expect(firstPosition).to.have.property(\"material\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-app-client",
+                    "value": "{{x-app-client}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-token",
+                    "value": "{{x-token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "{{authToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"orderId\": \"2114298019\",\r\n    \"date\": \"2026-04-21\",\r\n    \"interval\": \"18:00:00-21:00:00\",\r\n    \"transportTypeCode\": \"67\",\r\n    \"addressTo\": \"г Тюмень, ул Широтная, д 190\",\r\n    \"address\": {\r\n        \"pointCoordinates\": {\r\n            \"latitude\": 57.096866,\r\n            \"longitude\": 65.615985\r\n        },\r\n        \"pointAddress\": {\r\n            \"fullAddress\": \"г Тюмень, ул Широтная, д 190\",\r\n            \"city\": \"Тюмень\",\r\n            \"house\": \"190\",\r\n            \"regionCode\": \"72\",\r\n            \"street\": \"Широтная улица\"\r\n        }\r\n    },\r\n    \"phoneNumber\": \"79000000044\",\r\n    \"cost\": 200,\r\n    \"comment\": \"\",\r\n    \"unloading\": null,\r\n    \"positions\": [\r\n        {\r\n            \"elevator\": false,\r\n            \"material\": {\r\n                \"id\": \"160010\",\r\n                \"imageUrl\": \"https://cdn.sdvor.com/images/sdvor-catalog/350x350/0/160010.jpg?service_slug=sd_front\",\r\n                \"name\": \"Краска интерьерная моющаяся Ottisk матовая 0,9л\"\r\n            },\r\n            \"orderId\": \"2114298019\",\r\n            \"orderNumber\": \"000010\",\r\n            \"plant\": \"1021\",\r\n            \"quantity\": 1,\r\n            \"unit\": {\r\n                \"code\": \"ST\",\r\n                \"name\": \"шт.\",\r\n                \"base\": \"ST\",\r\n                \"numerator\": 1,\r\n                \"denumerator\": 1\r\n            },\r\n            \"unitCode\": \"ST\",\r\n            \"volume\": 0.002,\r\n            \"weight\": 1.48\r\n        }\r\n    ]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{cerebroBaseUrl}}/v1/transports/deliveries/0084290013",
+                  "host": [
+                    "{{cerebroBaseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "transports",
+                    "deliveries",
+                    "0084290013"
+                  ]
+                },
+                "description": "Метод GET\n\n/v1/transports/deliveries/{delivery}EndFragment\n\nполучает информацию о созданной транспортировке"
+              },
+              "response": []
+            },
+            {
+              "name": "интервалы",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Rosa-Api-Key",
+                    "value": "{{rosa-api-key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "https://cerebro.dev.contact-center.itlabs.io/api/sapApi/api/cerebro/v1/transports/positions?orders=1020167418",
+                  "protocol": "https",
+                  "host": [
+                    "cerebro",
+                    "dev",
+                    "contact-center",
+                    "itlabs",
+                    "io"
+                  ],
+                  "path": [
+                    "api",
+                    "sapApi",
+                    "api",
+                    "cerebro",
+                    "v1",
+                    "transports",
+                    "positions"
+                  ],
+                  "query": [
+                    {
+                      "key": "orders",
+                      "value": "1020167418"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "definition-delivery",
+      "item": [
+        {
+          "name": "Подбор транспорта",
+          "item": [
+            {
+              "name": "Подобрать доступность транспорта (доступны все виды)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "// Проверяем, что запрос выполнился успешно и сервер вернул HTTP 200\r",
+                      "pm.test(\"Status code is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "// Проверяем, что ответ сервера пришел в формате JSON\r",
+                      "pm.test(\"Response is valid JSON\", function () {\r",
+                      "    pm.response.to.be.json;\r",
+                      "});\r",
+                      "\r",
+                      "// Преобразуем тело ответа в JSON-объект для дальнейших проверок\r",
+                      "const json = pm.response.json();\r",
+                      "\r",
+                      "// Проверяем, что в ответе есть корневое поле data\r",
+                      "pm.test(\"Response contains data\", function () {\r",
+                      "    pm.expect(json).to.have.property(\"data\");\r",
+                      "    pm.expect(json.data).to.be.an(\"object\");\r",
+                      "});\r",
+                      "\r",
+                      "// Список групп транспорта, которые ожидаем получить в ответе\r",
+                      "const groups = [\"courierGroup\", \"loadersGroup\", \"manipulatorGroup\", \"otherGroup\"];\r",
+                      "\r",
+                      "// Проходим по каждой группе и выполняем одинаковые проверки\r",
+                      "groups.forEach((groupName) => {\r",
+                      "    \r",
+                      "    // Проверяем, что текущая группа присутствует в ответе\r",
+                      "    pm.test(`${groupName} exists`, function () {\r",
+                      "        pm.expect(json.data).to.have.property(groupName);\r",
+                      "    });\r",
+                      "\r",
+                      "    // Проверяем, что у группы есть поле transports и оно является массивом\r",
+                      "    pm.test(`${groupName} has transports array`, function () {\r",
+                      "        pm.expect(json.data[groupName]).to.have.property(\"transports\");\r",
+                      "        pm.expect(json.data[groupName].transports).to.be.an(\"array\");\r",
+                      "    });\r",
+                      "\r",
+                      "    // Проверяем бизнес-логику:\r",
+                      "    // если transports пустой, значит транспорт недоступен,\r",
+                      "    // и тогда обязательно должна прийти причина в поле reason\r",
+                      "    pm.test(`${groupName}: if transport is unavailable, reason is returned`, function () {\r",
+                      "        const group = json.data[groupName];\r",
+                      "\r",
+                      "        if (group.transports.length === 0) {\r",
+                      "            pm.expect(group).to.have.property(\"reason\");\r",
+                      "            pm.expect(group.reason).to.not.be.oneOf([null, \"\"]);\r",
+                      "            pm.expect(group.reason).to.be.a(\"string\");\r",
+                      "        }\r",
+                      "    });\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "Rosa-Api-Key",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "",
+                    "value": "",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"businessId\": \"SDVR\",\r\n    \"shipmentTypeId\": \"0001\",\r\n    \"transportCart\": {\r\n        \"positions\": [\r\n            {\r\n                \"productId\": \"160010\",\r\n                \"amount\": 1,\r\n                \"saleUnitId\": \"ST\",\r\n                \"plantId\": \"1021\",\r\n                \"warehouseId\": \"0005\"\r\n            }\r\n        ]\r\n    },\r\n    \"pointTo\": {\r\n        \"latitude\": 57.126739,\r\n        \"longitude\": 65.611565\r\n    },\r\n    \"clientRestrictions\": {}\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{definition.deliveryBaseURL}}/api/v1/shipment/transportsAvailability:find",
+                  "host": [
+                    "{{definition.deliveryBaseURL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "shipment",
+                    "transportsAvailability:find"
+                  ]
+                },
+                "description": "StartFragment**POST** `/api/v1/shipment/transportsAvailability:find`EndFragment  \n  \n\nМетод подбирает доступные варианты транспорта для корзины/отгрузки по параметрам заказа, адресу доставки и ограничениям клиента.\n\n### Что делает\n\nВозвращает группы транспорта и список подходящих ТС:\n\n- **courierGroup** — курьер\n    \n- **loadersGroup** — авто с грузчиками\n    \n- **manipulatorGroup** — авто с манипулятором\n    \n- **otherGroup** — обычный транспорт\n    \n\nДля каждой группы отдает:\n\n- название и описание\n    \n- минимальную цену\n    \n- минимальную цену разгрузки\n    \n- причину недоступности, если подходящих ТС нет\n    \n- список доступных транспортов"
+              },
+              "response": []
+            },
+            {
+              "name": "Подобрать доступность разного транспорта по услугам для товарной корзины (доступны все , кроме курьера)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "// Проверяем, что запрос выполнился успешно и сервер вернул HTTP 200\r",
+                      "pm.test(\"Status code is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "// Проверяем, что ответ сервера пришел в формате JSON\r",
+                      "pm.test(\"Response is valid JSON\", function () {\r",
+                      "    pm.response.to.be.json;\r",
+                      "});\r",
+                      "\r",
+                      "// Преобразуем тело ответа в JSON-объект для дальнейших проверок\r",
+                      "const json = pm.response.json();\r",
+                      "\r",
+                      "// Проверяем, что в ответе есть корневое поле data\r",
+                      "pm.test(\"Response contains data\", function () {\r",
+                      "    pm.expect(json).to.have.property(\"data\");\r",
+                      "    pm.expect(json.data).to.be.an(\"object\");\r",
+                      "});\r",
+                      "\r",
+                      "// Список групп транспорта, которые ожидаем получить в ответе\r",
+                      "const groups = [\"courierGroup\", \"loadersGroup\", \"manipulatorGroup\", \"otherGroup\"];\r",
+                      "\r",
+                      "// Проходим по каждой группе и выполняем одинаковые проверки\r",
+                      "groups.forEach((groupName) => {\r",
+                      "    \r",
+                      "    // Проверяем, что текущая группа вообще присутствует в ответе\r",
+                      "    pm.test(`${groupName} exists`, function () {\r",
+                      "        pm.expect(json.data).to.have.property(groupName);\r",
+                      "    });\r",
+                      "\r",
+                      "    // Проверяем, что у группы есть поле transports и оно является массивом\r",
+                      "    pm.test(`${groupName} has transports array`, function () {\r",
+                      "        pm.expect(json.data[groupName]).to.have.property(\"transports\");\r",
+                      "        pm.expect(json.data[groupName].transports).to.be.an(\"array\");\r",
+                      "    });\r",
+                      "\r",
+                      "    // Проверяем бизнес-логику:\r",
+                      "    // если список transports пустой, значит транспорт недоступен,\r",
+                      "    // и в таком случае сервер обязан вернуть reason с причиной\r",
+                      "    pm.test(`${groupName}: if transport is unavailable, reason is returned`, function () {\r",
+                      "        const group = json.data[groupName];\r",
+                      "\r",
+                      "        if (group.transports.length === 0) {\r",
+                      "            pm.expect(group).to.have.property(\"reason\");\r",
+                      "            pm.expect(group.reason).to.not.be.oneOf([null, \"\"]);\r",
+                      "            pm.expect(group.reason).to.be.a(\"string\");\r",
+                      "        }\r",
+                      "    });\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "Rosa-Api-Key",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "",
+                    "value": "",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"businessId\": \"SDVR\",\r\n    \"shipmentTypeId\": \"0001\",\r\n    \"transportCart\": {\r\n        \"positions\": [\r\n            {\r\n                \"productId\": \"2841\",\r\n                \"amount\": 15,\r\n                \"saleUnitId\": \"LST\",\r\n                \"plantId\": \"1021\",\r\n                \"warehouseId\": \"0002\"\r\n            },\r\n            {\r\n                \"productId\": \"570060\",\r\n                \"amount\": 1,\r\n                \"saleUnitId\": \"ST\",\r\n                \"plantId\": \"1027\",\r\n                \"warehouseId\": \"0067\"\r\n            },\r\n            {\r\n                \"productId\": \"570060\",\r\n                \"amount\": 4,\r\n                \"saleUnitId\": \"ST\",\r\n                \"plantId\": \"1021\",\r\n                \"warehouseId\": \"0005\"\r\n            },\r\n            {\r\n                \"productId\": \"68783\",\r\n                \"amount\": 4,\r\n                \"saleUnitId\": \"LST\",\r\n                \"plantId\": \"1021\",\r\n                \"warehouseId\": \"0007\",\r\n                \"sawing\": [\r\n                    {\r\n                        \"length\": 1.248,\r\n                        \"width\": 1.2,\r\n                        \"amount\": 2\r\n                    }\r\n                ]\r\n            }\r\n        ]\r\n    },\r\n    \"pointTo\": {\r\n        \"latitude\": 56.947458,\r\n        \"longitude\": 65.427132\r\n    },\r\n    \"clientRestrictions\": {\r\n        \"maxHeight\": 7,\r\n        \"maxWidth\": 6\r\n    }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{definition.deliveryBaseURL}}/api/v1/shipment/transportsAvailability:find",
+                  "host": [
+                    "{{definition.deliveryBaseURL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "shipment",
+                    "transportsAvailability:find"
+                  ]
+                },
+                "description": "StartFragment**POST** `/api/v1/shipment/transportsAvailability:find`EndFragment  \n  \n\nМетод подбирает доступные варианты транспорта для корзины/отгрузки по параметрам заказа, адресу доставки и ограничениям клиента.\n\n### Что делает\n\nВозвращает группы транспорта и список подходящих ТС:\n\n- **courierGroup** — курьер\n    \n- **loadersGroup** — авто с грузчиками\n    \n- **manipulatorGroup** — авто с манипулятором\n    \n- **otherGroup** — обычный транспорт\n    \n\nДля каждой группы отдает:\n\n- название и описание\n    \n- минимальную цену\n    \n- минимальную цену разгрузки\n    \n- причину недоступности, если подходящих ТС нет\n    \n- список доступных транспортов"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Варианты транспортировок",
+          "item": [
+            {
+              "name": "Поиск подходящих вариантов транспортировки сгруппированных по дате",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "\r",
+                      "pm.test(\"Status code is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "\r",
+                      "pm.test(\"Response is valid JSON\", function () {\r",
+                      "    pm.response.to.be.json;\r",
+                      "});\r",
+                      "\r",
+                      "// Преобразуем тело ответа в JSON-объект для дальнейших проверок\r",
+                      "const json = pm.response.json();\r",
+                      "\r",
+                      "// Проверяем, что в ответе есть корневой объект data\r",
+                      "pm.test(\"Response contains data\", function () {\r",
+                      "    pm.expect(json).to.have.property(\"data\");\r",
+                      "    pm.expect(json.data).to.be.an(\"object\");\r",
+                      "});\r",
+                      "\r",
+                      "// Проверяем, что в data есть массив items\r",
+                      "pm.test(\"Response contains items array\", function () {\r",
+                      "    pm.expect(json.data).to.have.property(\"items\");\r",
+                      "    pm.expect(json.data.items).to.be.an(\"array\");\r",
+                      "});\r",
+                      "\r",
+                      "// Проверяем, что массив items не пустой\r",
+                      "pm.test(\"Items array is not empty\", function () {\r",
+                      "    pm.expect(json.data.items.length).to.be.above(0);\r",
+                      "});\r",
+                      "\r",
+                      "// Проходим по каждому дню/элементу в items\r",
+                      "json.data.items.forEach((item, itemIndex) => {\r",
+                      "\r",
+                      "    // Проверяем, что у элемента есть дата\r",
+                      "    pm.test(`Item ${itemIndex + 1} contains date`, function () {\r",
+                      "        pm.expect(item).to.have.property(\"date\");\r",
+                      "        pm.expect(item.date).to.be.a(\"string\").and.not.empty;\r",
+                      "    });\r",
+                      "\r",
+                      "    // Проверяем, что у элемента есть groups и это массив\r",
+                      "    pm.test(`Item ${itemIndex + 1} contains groups array`, function () {\r",
+                      "        pm.expect(item).to.have.property(\"groups\");\r",
+                      "        pm.expect(item.groups).to.be.an(\"array\");\r",
+                      "    });\r",
+                      "\r",
+                      "    // Проверяем, что groups не пустой\r",
+                      "    pm.test(`Item ${itemIndex + 1} groups array is not empty`, function () {\r",
+                      "        pm.expect(item.groups.length).to.be.above(0);\r",
+                      "    });\r",
+                      "\r",
+                      "    // Проходим по каждой группе интервалов\r",
+                      "    item.groups.forEach((group, groupIndex) => {\r",
+                      "\r",
+                      "        // Проверяем, что у группы есть name\r",
+                      "        pm.test(`Item ${itemIndex + 1}, group ${groupIndex + 1} contains name`, function () {\r",
+                      "            pm.expect(group).to.have.property(\"name\");\r",
+                      "            pm.expect(group.name).to.be.a(\"string\").and.not.empty;\r",
+                      "        });\r",
+                      "\r",
+                      "        // Проверяем, что у группы есть options и это массив\r",
+                      "        pm.test(`Item ${itemIndex + 1}, group ${groupIndex + 1} contains options array`, function () {\r",
+                      "            pm.expect(group).to.have.property(\"options\");\r",
+                      "            pm.expect(group.options).to.be.an(\"array\");\r",
+                      "        });\r",
+                      "\r",
+                      "        // Проверяем, что в группе есть хотя бы один вариант доставки\r",
+                      "        pm.test(`Item ${itemIndex + 1}, group ${groupIndex + 1} options array is not empty`, function () {\r",
+                      "            pm.expect(group.options.length).to.be.above(0);\r",
+                      "        });\r",
+                      "    });\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "Rosa-Api-Key",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "",
+                    "value": "",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"businessId\": \"SDVR\",\r\n    \"shipmentTypeId\": \"0001\",\r\n    \"transportCart\": {\r\n        \"positions\": [\r\n            {\r\n                \"productId\": \"160010\",\r\n                \"amount\": 1,\r\n                \"saleUnitId\": \"ST\",\r\n                \"plantId\": \"1021\",\r\n                \"warehouseId\": \"0005\"\r\n            }\r\n        ]\r\n    },\r\n    \"pointTo\": {\r\n        \"latitude\": 57.096866,\r\n        \"longitude\": 65.615985\r\n    },\r\n    \"clientTransportRestrictions\": {\r\n        \"mustLoaderCrane\": false,\r\n        \"mustLoadersOnboard\": false\r\n    },\r\n    \"transportTypeIds\": [\r\n        \"67\"\r\n    ],\r\n    \"dateFrom\": \"2026-04-21\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{definition.deliveryBaseURL}}/api/v1/shipment/options:findGroupedByDate",
+                  "host": [
+                    "{{definition.deliveryBaseURL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "shipment",
+                    "options:findGroupedByDate"
+                  ]
+                },
+                "description": "Поиск подходящих вариантов транспортировки сгруппированных по дате с указанием идентификатора наиболее дешевого варианта для каждой даты"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Ценообразование",
+          "item": [
+            {
+              "name": "Рассчитать стоимость разгрузки",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "// Проверяем, что запрос выполнился успешно и вернулся статус 200\r",
+                      "pm.test(\"Status code is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "// Проверяем, что ответ пришел в формате JSON\r",
+                      "pm.test(\"Response is valid JSON\", function () {\r",
+                      "    pm.response.to.be.json;\r",
+                      "});\r",
+                      "\r",
+                      "// Преобразуем тело ответа в JSON\r",
+                      "const json = pm.response.json();\r",
+                      "\r",
+                      "// Проверяем, что в ответе есть обязательный объект data\r",
+                      "pm.test(\"Response contains required object data\", function () {\r",
+                      "    pm.expect(json).to.have.property(\"data\");\r",
+                      "    pm.expect(json.data).to.be.an(\"object\");\r",
+                      "});\r",
+                      "\r",
+                      "// Проверяем, что в data есть обязательные поля из Swagger schema\r",
+                      "pm.test(\"Response contains required fields: car, house, min, positions\", function () {\r",
+                      "    pm.expect(json.data).to.have.property(\"car\");\r",
+                      "    pm.expect(json.data).to.have.property(\"house\");\r",
+                      "    pm.expect(json.data).to.have.property(\"min\");\r",
+                      "    pm.expect(json.data).to.have.property(\"positions\");\r",
+                      "});\r",
+                      "\r",
+                      "// Проверяем, что positions по схеме является массивом\r",
+                      "pm.test(\"positions is an array\", function () {\r",
+                      "    pm.expect(json.data.positions).to.be.an(\"array\");\r",
+                      "});\r",
+                      "\r",
+                      "// Проверяем, что блоки car, house и min содержат поля стоимости\r",
+                      "pm.test(\"car, house and min contain cost and sale\", function () {\r",
+                      "    [\"car\", \"house\", \"min\"].forEach((field) => {\r",
+                      "        pm.expect(json.data[field]).to.have.property(\"cost\");\r",
+                      "        pm.expect(json.data[field]).to.have.property(\"sale\");\r",
+                      "        pm.expect(json.data[field].cost).to.be.a(\"number\");\r",
+                      "        pm.expect(json.data[field].sale).to.be.a(\"number\");\r",
+                      "    });\r",
+                      "});\r",
+                      "\r",
+                      "// Если есть хотя бы одна позиция, проверяем минимально ее структуру по ответу\r",
+                      "pm.test(\"If positions exist, first position contains required fields\", function () {\r",
+                      "    if (json.data.positions.length > 0) {\r",
+                      "        const firstPosition = json.data.positions[0];\r",
+                      "\r",
+                      "        pm.expect(firstPosition).to.have.property(\"car\");\r",
+                      "        pm.expect(firstPosition).to.have.property(\"house\");\r",
+                      "        pm.expect(firstPosition).to.have.property(\"isLiftUsed\");\r",
+                      "\r",
+                      "        pm.expect(firstPosition.car).to.have.property(\"cost\");\r",
+                      "        pm.expect(firstPosition.car).to.have.property(\"sale\");\r",
+                      "        pm.expect(firstPosition.house).to.have.property(\"cost\");\r",
+                      "        pm.expect(firstPosition.house).to.have.property(\"sale\");\r",
+                      "        pm.expect(firstPosition.isLiftUsed).to.be.a(\"boolean\");\r",
+                      "    }\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "Rosa-Api-Key",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"businessId\": \"SDVR\",\r\n    \"shipmentTypeId\": \"0001\",\r\n    \"transportCart\": {\r\n        \"positions\": [\r\n            {\r\n                \"productId\": \"160010\",\r\n                \"amount\": 1,\r\n                \"saleUnitId\": \"ST\",\r\n                \"plantId\": \"1021\",\r\n                \"warehouseId\": \"0005\"\r\n            }\r\n        ]\r\n    },\r\n    \"params\": {\r\n        \"floorNumber\": 0,\r\n        \"carryingDistance\": 30\r\n    }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{definition.deliveryBaseURL}}/api/v2/service/unloading/price:calculate",
+                  "host": [
+                    "{{definition.deliveryBaseURL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "service",
+                    "unloading",
+                    "price:calculate"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

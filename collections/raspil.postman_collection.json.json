@@ -1,0 +1,415 @@
+{
+  "info": {
+    "_postman_id": "0135338b-44eb-4a58-913e-d9659c04fabe",
+    "name": "распил",
+    "description": "StartFragment\n\n# Описание коллекции\n\nКоллекция предназначена для тестирования сервиса **Saw-ok** — сервиса оптимального расчета распила материалов.\n\nСервис позволяет:\n\n- оптимально раскладывать детали на листах или линейных материалах;\n    \n- рассчитывать количество пилов;\n    \n- строить схему распила;\n    \n- получать схему в форматах **PDF** и **image**;\n    \n- сохранять и повторно редактировать распил.\n    \n\nПоддерживаются разные виды распила, например:\n\n- точный;\n    \n- транспортировочный;\n    \n- и другие, в зависимости от настроек сервиса.\n    \n\nСервис используется внешними и внутренними пользователями.\n\n---\n\n# Что тестируется в коллекции\n\nКоллекция покрывает основные сценарии:\n\n- получение ограничений типа распила;\n    \n- создание нового распила;\n    \n- редактирование распила;\n    \n- сохранение распила;\n    \n- получение параметров сохраненного распила;\n    \n- получение схемы распила.\n    \n\n---\n\n# Переменные и безопасность\n\nВ коллекции используются переменные окружения:\n\n- `{{baseUrlSaw_ok}}` — базовый URL сервиса;\n    \n- `{{rosa_api_key}}` — токен доступа;\n    \n- `{{sawingId}}` — идентификатор распила.\n    \n\nАвторизация передается в header:\n\nrosa-api-key: {{rosa_api_key}}\n\n**Секретные данные в коллекции не хранятся.**  \nТокены, ключи и другие чувствительные значения должны передаваться только через **environment variables / current values** и не должны сохраняться внутри самой коллекции.\n\n---\n\nStartFragment\n\n# Проверки и запуск коллекции\n\nДля запросов в коллекции добавлены базовые проверки во вкладке **Scripts / Tests**:\n\n- проверка HTTP-статуса;\n    \n- проверка формата ответа;\n    \n- проверка наличия ключевых полей;\n    \n- базовые проверки бизнес-логики.\n    \n\nПроверки можно запускать:\n\n- по одному, выполняя отдельный запрос;\n    \n- сразу для всей коллекции через **Run collection**.\n    \n\n## Как запустить все проверки сразу\n\n1. Открой коллекцию\n    \n2. Нажми **Run**\n    \n3. Выбери нужный **environment**\n    \n4. Отметь запросы, которые нужно выполнить\n    \n5. Нажми **Run**\n    \n6. После выполнения посмотри результаты по passed / failed тестам\n    \n\n# Алгоритм выполнения запросов\n\n## **Новая позиция с услугой**\n\n_(нет сохраненного uuid распила)_\n\n### 1\\. Создание распила\n\n**POST** `/api/v1/sawing/`\n\nПередается:\n\n- код услуги распила;\n    \n- количество;\n    \n- длина;\n    \n- ширина.\n    \n\nОтвет:\n\n- `sawingId`\n    \n\nПосле выполнения запроса `sawingId` сохраняется в переменную окружения и используется в следующих запросах.\n\n---\n\n### 2\\. Получение схемы распила\n\n**GET** `/api/v1/sawing/{sawingId}/schema`\n\nИспользуется при необходимости получить изображение или PDF схемы распила.\n\nПримечание:\n\n- для **точного распила** возвращается изображение материала;\n    \n- для **транспортировочного распила** — материал, разрезанный на 2 части.\n    \n\n---\n\n### 3\\. Добавление / удаление детали\n\n**PUT** `/api/v1/sawing/{sawingId}`\n\nИспользуется для изменения уже созданного распила.\n\nПосле изменения, если нужна обновленная схема, повторно выполняется запрос из п.2.\n\n---\n\n### 4\\. Сохранение заказа\n\n**POST** `/api/v1/sawing/{sawingId}:save`\n\nИспользуется для сохранения итогового варианта распила.\n\n---\n\n## **Редактирование услуги / заказа**\n\n_(в заказе уже есть uuid распила)_\n\n### 1\\. Получение параметров сохраненного распила\n\n**GET** `/api/v1/sawing/{sawingId}`\n\nВозвращает сохраненные параметры и результат распила.\n\n---\n\n### 2\\. Получение схемы распила\n\n**GET** `/api/v1/sawing/{sawingId}/schema`\n\nИспользуется при необходимости получить изображение или PDF схемы.\n\nПримечание:\n\n- для **точного распила** возвращается изображение материала;\n    \n- для **транспортировочного распила** — материал, разрезанный на 2 части.\n    \n\n---\n\n### 3\\. Добавление / удаление детали\n\n**PUT** `/api/v1/sawing/{sawingId}`\n\nИзменяет существующий распил.\n\nПосле изменения для получения актуальной схемы снова выполняется запрос из п.2.\n\n---\n\n### 4\\. Сохранение заказа\n\n**POST** `/api/v1/sawing/{sawingId}:save`\n\nСохраняет обновленную версию распила.\n\n---\n\n# Рекомендуемый порядок запуска\n\n### Для нового распила:\n\n1. Получить ограничения типа распила\n    \n2. Создать распил\n    \n3. Получить схему распила\n    \n4. Обновить распил\n    \n5. Повторно получить схему при необходимости\n    \n6. Сохранить распил\n    \n\n### Для уже сохраненного распила:\n\n1. Получить параметры распила\n    \n2. Получить схему распила\n    \n3. Обновить распил\n    \n4. Повторно получить схему при необходимости\n    \n5. Сохранить распил\n    \n\n---\n\n# Что важно проверять\n\n- корректный HTTP-статус;\n    \n- наличие `sawingId` после создания;\n    \n- корректность сохранения `sawingId` в переменную окружения;\n    \n- наличие `data`, `sawingParams`, `sawingResult` в ответах;\n    \n- корректное получение схемы в `image` и `pdf`;\n    \n- корректную работу сценариев создания, редактирования и сохранения распила.\n    \n\n## Тестовые данные:\n\nкоды типов распила:\n\n**Листовой** <u>Код SAP:&nbsp;</u>  451852\n\n**Погонажный** <u>Код SAP:</u> 525790\n\n**Металл**(весь) <u>Код SAP:</u> 449315\n\nТранспортный Код SAP: 535062",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "46057530",
+    "_collection_link": "https://go.postman.co/collection/46057530-0135338b-44eb-4a58-913e-d9659c04fabe?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "новая позиция с услугой (нет сохраненного uuid Распила)",
+      "item": [
+        {
+          "name": "получить ограничения типа распила",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "pm.test(\"Response is JSON\", function () {\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Response contains data\", function () {\r",
+                  "    pm.expect(response).to.have.property(\"data\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response contains sawingConstraints\", function () {\r",
+                  "    pm.expect(response.data).to.have.property(\"sawingConstraints\");\r",
+                  "    pm.expect(response.data.sawingConstraints).to.be.an(\"array\").that.is.not.empty;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "rosa-api-key",
+                "value": "{{rosa_api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrlSaw_ok}}api/v1/sawing/constraints?sawingServiceExternalId=525790",
+              "host": [
+                "{{baseUrlSaw_ok}}api"
+              ],
+              "path": [
+                "v1",
+                "sawing",
+                "constraints"
+              ],
+              "query": [
+                {
+                  "key": "sawingServiceExternalId",
+                  "value": "525790",
+                  "description": "Код услуги распила"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "создать распил",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "pm.test(\"Response is JSON\", function () {\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "const response = pm.response.json();\r",
+                  "pm.test(\"Response contains data\", function () {\r",
+                  "    pm.expect(response).to.have.property(\"data\");\r",
+                  "});\r",
+                  "pm.test(\"Response contains sawingId\", function () {\r",
+                  "    pm.expect(response.data).to.have.property(\"sawingId\");\r",
+                  "    pm.expect(response.data.sawingId).to.be.a(\"string\").and.not.empty;\r",
+                  "});\r",
+                  "pm.test(\"Response contains sawingResult\", function () {\r",
+                  "    pm.expect(response.data).to.have.property(\"sawingResult\");\r",
+                  "    pm.expect(response.data.sawingResult).to.be.an(\"object\");\r",
+                  "});\r",
+                  "pm.test(\"Response contains sawingParams\", function () {\r",
+                  "    pm.expect(response.data).to.have.property(\"sawingParams\");\r",
+                  "    pm.expect(response.data.sawingParams).to.be.an(\"object\");\r",
+                  "});\r",
+                  "pm.test(\"Sawing params contains sheets array\", function () {\r",
+                  "    pm.expect(response.data.sawingParams).to.have.property(\"sheets\");\r",
+                  "    pm.expect(response.data.sawingParams.sheets).to.be.an(\"array\").that.is.not.empty;\r",
+                  "});\r",
+                  "\r",
+                  "// опционная проверка, если необходимо переиспользовать Id созданного распила\r",
+                  "pm.test(\"Save sawingId to environment\", function () {\r",
+                  "    pm.environment.set(\"sawingId\", response.data.sawingId);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "rosa-api-key",
+                "value": "{{rosa_api_key}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"sawingParams\": {\r\n    \"sheets\": [\r\n      {\r\n        \"count\": 5,\r\n        \"length\": 1300,\r\n        \"width\": 1400\r\n      }\r\n    ],\r\n    \"sawingServiceExternalId\": 451852\r\n  }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrlSaw_ok}}api/v1/sawing/",
+              "host": [
+                "{{baseUrlSaw_ok}}api"
+              ],
+              "path": [
+                "v1",
+                "sawing",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "обновить распил",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response is JSON\", function () {\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Response contains data\", function () {\r",
+                  "    pm.expect(response).to.have.property(\"data\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response contains sawingId\", function () {\r",
+                  "    pm.expect(response.data).to.have.property(\"sawingId\");\r",
+                  "    pm.expect(response.data.sawingId).to.be.a(\"string\").and.not.empty;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response contains sawingResult\", function () {\r",
+                  "    pm.expect(response.data).to.have.property(\"sawingResult\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response contains sawingParams\", function () {\r",
+                  "    pm.expect(response.data).to.have.property(\"sawingParams\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "rosa-api-key",
+                "value": "{{rosa_api_key}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"sawingParams\": {\r\n    \"sheets\": [\r\n      {\r\n        \"count\": 4,\r\n        \"length\": 1300,\r\n        \"width\": 300\r\n      }\r\n    ],\r\n    \"sawingServiceExternalId\": 451852,\r\n    \"parts\": [\r\n      {\r\n        \"count\": 4,\r\n        \"length\": 100,\r\n        \"width\": 100\r\n      }\r\n    ]\r\n  },\r\n  \"needAddedBins\": true,\r\n  \"addedBinIndex\": 0\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrlSaw_ok}}api/v1/sawing/{{sawingId}}",
+              "host": [
+                "{{baseUrlSaw_ok}}api"
+              ],
+              "path": [
+                "v1",
+                "sawing",
+                "{{sawingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "сохранить распил",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {\r",
+                  "    pm.response.to.have.status(204);\r",
+                  "});\r",
+                  "pm.test(\"Response time is less than 200ms\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "rosa-api-key",
+                "value": "{{rosa_api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrlSaw_ok}}api/v1/sawing/{{sawingId}}:save",
+              "host": [
+                "{{baseUrlSaw_ok}}api"
+              ],
+              "path": [
+                "v1",
+                "sawing",
+                "{{sawingId}}:save"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Редактирование услуги\\заказа (в заказе есть uuid Распила)",
+      "item": [
+        {
+          "name": "получить схему распила",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response content type is image or pdf\", function () {\r",
+                  "    const contentType = pm.response.headers.get(\"Content-Type\");\r",
+                  "    pm.expect(\r",
+                  "        contentType.includes(\"image/\") || contentType.includes(\"application/pdf\")\r",
+                  "    ).to.be.true;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response body is not empty\", function () {\r",
+                  "    pm.expect(pm.response.text()).to.not.be.empty;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "rosa-api-key",
+                "value": "{{rosa_api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrlSaw_ok}}api/v1/sawing/:sawingId/schema?schemaFormat=image&imageSize=scaled&imageNumber=0",
+              "host": [
+                "{{baseUrlSaw_ok}}api"
+              ],
+              "path": [
+                "v1",
+                "sawing",
+                ":sawingId",
+                "schema"
+              ],
+              "query": [
+                {
+                  "key": "schemaFormat",
+                  "value": "image",
+                  "description": "image. pdf"
+                },
+                {
+                  "key": "imageSize",
+                  "value": "scaled",
+                  "description": "scaled/original/a4"
+                },
+                {
+                  "key": "imageNumber",
+                  "value": "0",
+                  "description": "Номер изображения (integer)"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "sawingId",
+                  "value": "{{sawingId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Получаем параметру сохраненного распила",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response is JSON\", function () {\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Response contains data\", function () {\r",
+                  "    pm.expect(response).to.have.property(\"data\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response contains sawingId\", function () {\r",
+                  "    pm.expect(response.data.sawingId).to.be.a(\"string\").and.not.empty;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response contains sawingParams and sawingResult\", function () {\r",
+                  "    pm.expect(response.data).to.have.property(\"sawingParams\");\r",
+                  "    pm.expect(response.data).to.have.property(\"sawingResult\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "rosa-api-key",
+                "value": "{{rosa_api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrlSaw_ok}}api/v1/sawing/{{sawingId}}?isForDocument=false",
+              "host": [
+                "{{baseUrlSaw_ok}}api"
+              ],
+              "path": [
+                "v1",
+                "sawing",
+                "{{sawingId}}"
+              ],
+              "query": [
+                {
+                  "key": "isForDocument",
+                  "value": "false",
+                  "description": " (boolean | null)"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
